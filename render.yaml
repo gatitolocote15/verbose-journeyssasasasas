@@ -1,0 +1,16 @@
+services:
+  - type: web
+    name: bin-service
+    env: node
+    plan: free
+    region: oregon
+    buildCommand: npm install
+    startCommand: npm start
+    healthCheckPath: /ping
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: ALLOWED_ORIGIN
+        value: "*"
+      - key: PUBLIC_URL
+        sync: false
