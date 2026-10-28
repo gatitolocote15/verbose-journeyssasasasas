@@ -1,10 +1,13 @@
+const localColombia = require('./providers/localColombia');
 const binlist = require('./providers/binlist');
 const handyapi = require('./providers/handyapi');
 const binsSu = require('./providers/binsSu');
 const bincheckIo = require('./providers/bincheckIo');
 const { normalizeBank, normalizeScheme } = require('./normalizer');
 
-const PROVIDERS = [binlist, handyapi, binsSu, bincheckIo];
+// localColombia va primero: cero latencia, máxima precisión para BINs colombianos.
+// Si el BIN no está en la tabla local, los externos actúan como fallback.
+const PROVIDERS = [localColombia, binlist, handyapi, binsSu, bincheckIo];
 const PROVIDER_TIMEOUT_MS = 1500;
 const RACE_TIMEOUT_MS = 2500;
 
@@ -33,7 +36,9 @@ async function lookupBin(bin) {
     withTimeout(fn(bin, controllers[i].signal), PROVIDER_TIMEOUT_MS, controllers[i])
       .then((raw) => ({
         ...raw,
-        bankSlug: normalizeBank(raw.bank),
+        // Si el proveedor ya incluyó bankSlug (tabla local), lo respetamos;
+        // de lo contrario, lo derivamos del nombre del banco.
+        bankSlug: raw.bankSlug || normalizeBank(raw.bank),
         schemeNorm: normalizeScheme(raw.scheme),
       }))
   );

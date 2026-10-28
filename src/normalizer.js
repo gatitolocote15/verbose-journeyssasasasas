@@ -2,6 +2,32 @@
 // que usan el <select> de payment.html y el bankLogoMap del frontend.
 
 const BANK_PATTERNS = [
+  // ── Bancos colombianos (prioridad alta) ────────────────────────────────────
+  { slug: 'bancolombia',    regex: /bancolombia/i },
+  { slug: 'davivienda',     regex: /davivienda/i },
+  { slug: 'bogota',         regex: /\bbogot[aá]\b|banco.*bogot[aá]|bogot[aá].*banco/i },
+  { slug: 'bbva',           regex: /\bbbva\b/i },
+  { slug: 'popular',        regex: /banco popular/i },
+  { slug: 'occidente',      regex: /occidente|ocidente/i },
+  { slug: 'colpatria',      regex: /colpatria|scotiabank.*col/i },
+  { slug: 'agrario',        regex: /agrario/i },
+  { slug: 'caja-social',    regex: /caja social|cajasocial/i },
+  { slug: 'av-villas',      regex: /av[\s-]?villas|avvillas/i },
+  { slug: 'falabella',      regex: /falabella/i },
+  { slug: 'santander',      regex: /santander/i },
+  { slug: 'citibank',       regex: /citi(bank)?/i },
+  { slug: 'finandina',      regex: /finandina/i },
+  { slug: 'bancoomeva',     regex: /bancoomeva|coomeva/i },
+  { slug: 'serfinansa',     regex: /serfinansa|serfi/i },
+  { slug: 'nequi',          regex: /nequi/i },
+  { slug: 'nubank',         regex: /\bnu\b|nubank|nu colombia/i },
+  { slug: 'rappipay',       regex: /rappi(pay)?/i },
+  { slug: 'dale',           regex: /\bdale\b/i },
+  { slug: 'lulo',           regex: /lulo/i },
+  { slug: 'pibank',         regex: /pibank/i },
+  { slug: 'littio',         regex: /littio/i },
+  { slug: 'sudameris',      regex: /sudameris/i },
+  // ── Bancos ecuatorianos ────────────────────────────────────────────────────
   { slug: 'pichincha',        regex: /pichincha/i },
   { slug: 'produbanco',       regex: /produbanco|promerica/i },
   { slug: 'pacifico',         regex: /pac[ií]fico/i },
